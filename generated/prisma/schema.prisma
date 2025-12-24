@@ -56,14 +56,16 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-  posts         Post[]
+  id               String            @id @default(cuid())
+  name             String?
+  email            String?           @unique
+  emailVerified    DateTime?
+  image            String?
+  accounts         Account[]
+  sessions         Session[]
+  posts            Post[]
+  businessPersonas BusinessPersona[]
+  customerPersonas CustomerPersona[]
 }
 
 model VerificationToken {
@@ -72,4 +74,95 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+// Business Persona for Business Owners, Investors, and Ventures
+model BusinessPersona {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  businessType String // "owner" | "investor" | "venture"
+
+  // Demographic
+  age        String?
+  gender     String?
+  ethnicity  String?
+  income     String?
+  education  String?
+  religion   String?
+  profession String?
+
+  // Psychographic
+  personalityTraits String?
+  hobbies           String?
+  lifeGoals         String?
+  values            String?
+  beliefs           String?
+  lifestyles        String?
+
+  // Geographic
+  country    String?
+  region     String?
+  city       String?
+  postalCode String?
+
+  // Behavioral
+  spendingHabits    String?
+  purchasingHabits  String?
+  browsingHabits    String?
+  brandInteractions String?
+  brandLoyalty      String?
+  previousFeedback  String?
+
+  // Relation to User (optional - for logged in users)
+  createdBy   User?   @relation(fields: [createdById], references: [id])
+  createdById String?
+
+  @@index([businessType])
+  @@index([createdById])
+}
+
+// Customer Persona for Consumer Insights
+model CustomerPersona {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Demographic
+  age        String?
+  gender     String?
+  ethnicity  String?
+  income     String?
+  education  String?
+  religion   String?
+  profession String?
+
+  // Psychographic
+  personalityTraits String?
+  hobbies           String?
+  lifeGoals         String?
+  values            String?
+  beliefs           String?
+  lifestyles        String?
+
+  // Geographic
+  country    String?
+  region     String?
+  city       String?
+  postalCode String?
+
+  // Behavioral
+  spendingHabits    String?
+  purchasingHabits  String?
+  browsingHabits    String?
+  brandInteractions String?
+  brandLoyalty      String?
+  previousFeedback  String?
+
+  // Relation to User (optional - for logged in users)
+  createdBy   User?   @relation(fields: [createdById], references: [id])
+  createdById String?
+
+  @@index([createdById])
 }
